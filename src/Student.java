@@ -12,8 +12,9 @@ public class Student {
     int studentGraduationDate;
     boolean perfectRecord;
     int numberOfExcusedAbscesses;
+    int studentId;
 
-    public Student(String name,int age,double gpa, int studentGraduationDate,boolean perfectRecord,int numberOfExcusedAbscesses,int numberOfUnexcusedAbscesses)
+    public Student(String name,int age,double gpa, int studentGraduationDate,boolean perfectRecord,int numberOfExcusedAbscesses,int numberOfUnexcusedAbscesses, int studentId)
     {
         this.name = name;
         this.age = age;
@@ -22,6 +23,7 @@ public class Student {
         this.numberOfUnexcusedAbscesses = numberOfUnexcusedAbscesses;
         this.studentGraduationDate = studentGraduationDate;
         this.perfectRecord = perfectRecord;
+        this.studentId = studentId;
     }
 
 

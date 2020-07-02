@@ -4,13 +4,15 @@
     * @author: Hozaifa Owaisi <ggk4b00m@gmail.com>
 */
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.beans.XMLEncoder;
+import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.*;
+
 public class StudentProfile {
     boolean exit;
     int numberOfOptions = 3;
-    boolean inputValidated;
     protected List<Student> students = new ArrayList<Student>();
     School school = new School();
     public static void main(String[] args) {
@@ -70,22 +72,56 @@ public class StudentProfile {
     }
 
     public Student createStudentProfile(){
+        String name = "";
+        int age = 0;
+        double gpa = 0.0;
+        boolean record = true;
+        int excusedAbsc = 0;
+        int unExcusedAbsc = 0;
+        int date = 2024;
+        int studentId = 0;
         Scanner input = new Scanner(System.in);
-        System.out.print("Student Name: ");
-        String name = input.nextLine();
-        System.out.print("Student Age: ");
-        int age = input.nextInt();
-        System.out.print("Student GPA: ");
-        double gpa = input.nextDouble();
-        System.out.print("Student Has a perfect record (true, false): ");
-        boolean record = input.nextBoolean();
-        System.out.print("Number of Excused Abscesses: ");
-        int excusedAbsc = input.nextInt();
-        System.out.print("Number of Unexcused Abscesses: ");
-        int unExcusedAbsc = input.nextInt();
-        System.out.print("Student Graduation Year: ");
-        int date = input.nextInt();
-        Student student = new Student(name,age,gpa, date,record,excusedAbsc,unExcusedAbsc);
+        try {
+            System.out.print("Student Name: ");
+            name = input.nextLine();
+
+        } catch (NoSuchElementException | IllegalStateException e){System.out.println("Error");}
+        try {
+            System.out.print("Student Age: ");
+            age = input.nextInt();
+
+        } catch(NoSuchElementException | IllegalStateException e){ System.out.println("Invalid Input"); }
+        try {
+            System.out.print("Student GPA: ");
+            gpa = input.nextDouble();
+
+        } catch(NoSuchElementException | IllegalStateException e){ System.out.println("Invalid Input"); }
+        try {
+            System.out.print("Student Has a perfect record (true, false): ");
+            record = input.nextBoolean();
+
+        } catch(NoSuchElementException | IllegalStateException e){ System.out.println("Invalid Input"); }
+        try {
+            System.out.print("Number of Excused Abscesses: ");
+            excusedAbsc = input.nextInt();
+
+        } catch(NoSuchElementException | IllegalStateException e){ System.out.println("Invalid Input"); }
+        try {
+            System.out.print("Number of Unexcused Abscesses: ");
+            unExcusedAbsc = input.nextInt();
+
+        } catch(NoSuchElementException | IllegalStateException e){ System.out.println("Invalid Input"); }
+        try {
+            System.out.print("Student Graduation Year: ");
+            date = input.nextInt();
+
+        } catch(NoSuchElementException | IllegalStateException e){ System.out.println("Invalid Input"); }
+        try {
+            System.out.print("Student ID: ");
+            studentId = input.nextInt();
+        } catch(NoSuchElementException | IllegalStateException e){ System.out.println("Invalid Input"); }
+
+        Student student = new Student(name,age,gpa, date,record,excusedAbsc,unExcusedAbsc,studentId);
         students.add(student);
         saveStudentData(students);
         return student;
@@ -110,9 +146,13 @@ public class StudentProfile {
 
     public void saveStudentData(List<Student> students) {
         school.setStudents(students);
+
     }
     public void searchForStudent(){
 
     }
+
+
+
 }
 
