@@ -4,29 +4,45 @@
     * @author: Hozaifa Owaisi <ggk4b00m@gmail.com>
 */
 
-import java.beans.XMLEncoder;
-import java.io.BufferedOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.*;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class StudentProfile {
     boolean exit;
+    int indexPointer = 0;
     int numberOfOptions = 3;
-    protected List<Student> students = new ArrayList<Student>();
-    School school = new School();
+    static School school= new School();
+    protected List<Student> students =new ArrayList<>();
+
+
     public static void main(String[] args) {
         StudentProfile profile = new StudentProfile();
-        profile.runMenu();
+        try {
+            profile.runMenu(school);
+            profile.convortToJson(school);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 
-    public void runMenu() {
+    public School runMenu(School school) {
         printHeader();
+        //school= new School();
         while (!exit) {
+            indexPointer= indexPointer +1;
             printMenu();
             int choice = getInput();
-            performAaction(choice);
+            performAaction(choice, school);
         }
+        return school;
     }
 
     public void printHeader() {
@@ -58,20 +74,20 @@ public class StudentProfile {
         return choice;
     }
 
-    public void performAaction(int choice) {
+    public void performAaction(int choice, School school) {
         switch (choice) {
             case 0 -> {
                 exit = true;
                 System.out.println("Thank You for using this Application.");
             }
-            case 1 -> printStudentInfo(createStudentProfile());
+            case 1 -> createStudentProfile(school);
             case 2 -> searchForStudent();
-            case 3 -> numberOfStudentProfile();
+            case 3 -> numberOfStudentProfile(school);
             default -> System.out.println("An unknown error has occurred.");
         }
     }
 
-    public Student createStudentProfile(){
+    public void createStudentProfile(School school){
         String name = "";
         int age = 0;
         double gpa = 0.0;
@@ -123,36 +139,36 @@ public class StudentProfile {
 
         Student student = new Student(name,age,gpa, date,record,excusedAbsc,unExcusedAbsc,studentId);
         students.add(student);
-        saveStudentData(students);
-        return student;
+        school.setStudents(students);
+        //saveStudentData(students);
     }
 
-    public void numberOfStudentProfile() {
+    public void numberOfStudentProfile(School school) {
 
         System.out.println("There are a total of "+school.numberOfStudentsInSchool()+" students in this school.");
     }
 
-    public void printStudentInfo(Student student){
+    public void printStudentInfo(School school , int index){
         System.out.println("+--------------------------------------------------------------+");
-        System.out.println("|Name: " + student.name);
-        System.out.println("|Age: " + student.age);
-        System.out.println("|GPA: " +student.GPA);
-        System.out.println("|Graduation Year: " + student.studentGraduationDate);
-        System.out.println("|Perfect Record: " + student.perfectRecord);
-        System.out.println("|Excused Abscesses: " + student.numberOfExcusedAbscesses);
-        System.out.println("|Unexcused Abscesses: "+student.numberOfUnexcusedAbscesses);
+        System.out.println("|Name: " + school.getStudents().get(index).getName());
+        System.out.println("|Age: " + school.getStudents().get(index).getAge());
+        System.out.println("|GPA: " + school.getStudents().get(index).getGPA());
+        System.out.println("|Graduation Year: " + school.getStudents().get(index).getStudentGraduationDate());
+        System.out.println("|Perfect Record: " + school.getStudents().get(index).getPerfectRecord());
+        System.out.println("|Excused Abscesses: " + school.getStudents().get(index).getPerfectRecord());
+        System.out.println("|Unexcused Abscesses: "+school.getStudents().get(index).getNumberOfUnexcusedAbscesses());
         System.out.println("+--------------------------------------------------------------+");
-    }
-
-    public void saveStudentData(List<Student> students) {
-        school.setStudents(students);
-
     }
     public void searchForStudent(){
 
     }
 
+    public void convortToJson(School school) throws JsonGenerationException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        //String jsonStr = mapper.writeValueAsString(school);
+        mapper.writeValue(new File("school.json"), school);
 
+    }
 
 }
 
