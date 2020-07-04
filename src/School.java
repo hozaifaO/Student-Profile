@@ -13,9 +13,6 @@ public class School {
 
     List<Student> students =  new ArrayList<Student>();
 
-    public School(List<Student> students) {
-        this.students = students;
-    }
     public School(){}
 
     public int numberOfStudentsInSchool(){
@@ -28,5 +25,12 @@ public class School {
     }
     public void setStudents(List<Student> students) {
         this.students = students;
+    }
+
+    @Override
+    public String toString() {
+        return "School{" +
+                "students=" + students.size() +
+                '}';
     }
 }

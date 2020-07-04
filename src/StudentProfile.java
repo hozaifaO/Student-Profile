@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -17,13 +18,17 @@ public class StudentProfile {
     boolean exit;
     int indexPointer = 0;
     int numberOfOptions = 3;
-    static School school= new School();
-    protected List<Student> students =new ArrayList<>();
+    static School school = new School();
+    protected static List<Student> students =new ArrayList<>();
 
 
     public static void main(String[] args) {
         StudentProfile profile = new StudentProfile();
+        ObjectMapper mapper = new ObjectMapper();
+        School readSchool;
         try {
+            readSchool = mapper.readValue(Paths.get("school.json").toFile(), School.class);
+            students = readSchool.getStudents();
             profile.runMenu(school);
             profile.convortToJson(school);
         } catch (IOException e){
@@ -81,7 +86,7 @@ public class StudentProfile {
             }
             case 1 -> createStudentProfile(school);
             case 2 -> printStudentInfo(searchForStudent(school, askForStudentId()));
-            case 3 -> numberOfStudentProfile(school);
+            case 3 -> numberOfStudentProfile();
             default -> System.out.println("An unknown error has occurred.");
         }
     }
@@ -92,7 +97,7 @@ public class StudentProfile {
         try {
             System.out.print("Enter the Student ID: ");
             id = input.nextInt();
-        } catch (NoSuchElementException | IllegalStateException e){System.out.println("Please put in numbers");}
+        } catch (NoSuchElementException | IllegalStateException e){System.out.println("\nPlease put in numbers"); e.printStackTrace();}
         return  id;
     }
 
@@ -152,9 +157,9 @@ public class StudentProfile {
         //saveStudentData(students);
     }
 
-    public void numberOfStudentProfile(School school) {
+    public void numberOfStudentProfile() {
 
-        System.out.println("There are a total of "+school.numberOfStudentsInSchool()+" students in this school.");
+        System.out.println("There are a total of "+students.size()+" students in this school.");
     }
 
     public void printStudentInfo(Student student){
@@ -190,6 +195,14 @@ public class StudentProfile {
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(new File("school.json"), school);
 
+    }
+
+    public static School getSchool() {
+        return school;
+    }
+
+    public static void setSchool(School school) {
+        StudentProfile.school = school;
     }
 
 }

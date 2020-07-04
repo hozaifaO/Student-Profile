@@ -15,7 +15,7 @@ public class Student {
     boolean perfectRecord;
     int numberOfExcusedAbscesses;
     int studentId;
-
+    public Student(){}
     public Student(String name,int age,double gpa, int studentGraduationDate,boolean perfectRecord,int numberOfExcusedAbscesses,int numberOfUnexcusedAbscesses, int studentId)
     {
         this.name = name;
@@ -92,6 +92,8 @@ public class Student {
     public void setStudentId(int studentId) {
         this.studentId = studentId;
     }
+
+
 
 
 }
