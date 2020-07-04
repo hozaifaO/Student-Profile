@@ -4,7 +4,6 @@
     * @author: Hozaifa Owaisi <ggk4b00m@gmail.com>
 */
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -81,10 +80,20 @@ public class StudentProfile {
                 System.out.println("Thank You for using this Application.");
             }
             case 1 -> createStudentProfile(school);
-            case 2 -> searchForStudent();
+            case 2 -> printStudentInfo(searchForStudent(school, askForStudentId()));
             case 3 -> numberOfStudentProfile(school);
             default -> System.out.println("An unknown error has occurred.");
         }
+    }
+
+    public int askForStudentId() {
+        int id = -1;
+        Scanner input = new Scanner(System.in);
+        try {
+            System.out.print("Enter the Student ID: ");
+            id = input.nextInt();
+        } catch (NoSuchElementException | IllegalStateException e){System.out.println("Please put in numbers");}
+        return  id;
     }
 
     public void createStudentProfile(School school){
@@ -148,24 +157,37 @@ public class StudentProfile {
         System.out.println("There are a total of "+school.numberOfStudentsInSchool()+" students in this school.");
     }
 
-    public void printStudentInfo(School school , int index){
-        System.out.println("+--------------------------------------------------------------+");
-        System.out.println("|Name: " + school.getStudents().get(index).getName());
-        System.out.println("|Age: " + school.getStudents().get(index).getAge());
-        System.out.println("|GPA: " + school.getStudents().get(index).getGPA());
-        System.out.println("|Graduation Year: " + school.getStudents().get(index).getStudentGraduationDate());
-        System.out.println("|Perfect Record: " + school.getStudents().get(index).getPerfectRecord());
-        System.out.println("|Excused Abscesses: " + school.getStudents().get(index).getPerfectRecord());
-        System.out.println("|Unexcused Abscesses: "+school.getStudents().get(index).getNumberOfUnexcusedAbscesses());
-        System.out.println("+--------------------------------------------------------------+");
-    }
-    public void searchForStudent(){
+    public void printStudentInfo(Student student){
+        if (student != null){
+            System.out.println("+--------------------------------------------------------------+");
+            System.out.println("|Name: " + student.getName());
+            System.out.println("|Age: " + student.getAge());
+            System.out.println("|GPA: " + student.getGPA());
+            System.out.println("|Graduation Year: " + student.getStudentGraduationDate());
+            System.out.println("|Perfect Record: " + student.getPerfectRecord());
+            System.out.println("|Excused Abscesses: " + student.getPerfectRecord());
+            System.out.println("|Unexcused Abscesses: "+student.getNumberOfUnexcusedAbscesses());
+            System.out.println("+--------------------------------------------------------------+");
+        } else {
+            System.out.print("\n No Student with that ID ");
+        }
 
     }
 
-    public void convortToJson(School school) throws JsonGenerationException, IOException {
+    public Student searchForStudent(School school, int studentId){
+        Student student = null;
+        for(int i=0; i < school.getStudents().size();i++){
+
+            if (studentId == school.getStudents().get(i).studentId) {
+                student = school.getStudents().get(i);
+
+            }
+        }
+        return student;
+    }
+
+    public void convortToJson(School school) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        //String jsonStr = mapper.writeValueAsString(school);
         mapper.writeValue(new File("school.json"), school);
 
     }
