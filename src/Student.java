@@ -4,7 +4,6 @@
     * @author: Hozaifa Owaisi <ggk4b00m@gmail.com>
  */
 
-import java.io.Serializable;
 
 public class Student {
     String name;

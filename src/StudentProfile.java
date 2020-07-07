@@ -9,10 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 public class StudentProfile {
     boolean exit;
@@ -31,22 +28,18 @@ public class StudentProfile {
             students = readSchool.getStudents();
             profile.runMenu(school);
             profile.convortToJson(school);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        } catch (IOException e) {e.printStackTrace();}
 
     }
 
-    public School runMenu(School school) {
+    public void runMenu(School school) {
         printHeader();
-        //school= new School();
         while (!exit) {
             indexPointer= indexPointer +1;
             printMenu();
             int choice = getInput();
             performAaction(choice, school);
         }
-        return school;
     }
 
     public void printHeader() {
@@ -97,7 +90,10 @@ public class StudentProfile {
         try {
             System.out.print("Enter the Student ID: ");
             id = input.nextInt();
-        } catch (NoSuchElementException | IllegalStateException e){System.out.println("\nPlease put in numbers"); e.printStackTrace();}
+        } catch (IllegalStateException e){System.out.println("\nUnknown error"); e.printStackTrace();}
+          catch (InputMismatchException e){
+            System.out.println("\nPlease put in numbers.");
+          }
         return  id;
     }
 
@@ -154,12 +150,11 @@ public class StudentProfile {
         Student student = new Student(name,age,gpa, date,record,excusedAbsc,unExcusedAbsc,studentId);
         students.add(student);
         school.setStudents(students);
-        //saveStudentData(students);
     }
 
     public void numberOfStudentProfile() {
 
-        System.out.println("There are a total of "+students.size()+" students in this school.");
+        System.out.println("\n There are a total of "+students.size()+" students in this school.");
     }
 
     public void printStudentInfo(Student student){
@@ -174,7 +169,7 @@ public class StudentProfile {
             System.out.println("|Unexcused Abscesses: "+student.getNumberOfUnexcusedAbscesses());
             System.out.println("+--------------------------------------------------------------+");
         } else {
-            System.out.print("\n No Student with that ID ");
+            System.out.println("\n No Student with that ID ");
         }
 
     }
